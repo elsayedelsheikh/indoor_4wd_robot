@@ -1,0 +1,17 @@
+<?xml version="1.0"?>
+<robot xmlns:xacro="http://ros.org/wiki/xacro" name="greenguardian">
+    <!-- paramters to be set from the launch file -->
+    <xacro:arg name="prefix" default="" />
+
+    <!-- Robot Base -->
+    <xacro:include filename="$(find bot_description)/description/robot_base.xacro"/>
+    <xacro:bot_base prefix="$(arg prefix)"/>
+
+    <!-- LIDAR -->
+    <xacro:include filename="VLP-16.urdf.xacro"/>
+        <xacro:VLP-16 parent="base_link" name="velodyne" topic="/scan"  hz="10" samples="440" >
+        <origin xyz="0.43 0 0.1" rpy="0 0 0" />
+    </xacro:VLP-16>
+
+
+</robot>

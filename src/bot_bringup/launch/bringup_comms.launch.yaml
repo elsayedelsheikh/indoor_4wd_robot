@@ -1,0 +1,10 @@
+launch:
+- node:
+    pkg: "bot_bringup"
+    exec: "serial_server"
+    name: "bringup_server"
+
+- node:
+    pkg: "bot_bringup"
+    exec: "robot_comms"
+    name: "bringup_comms"

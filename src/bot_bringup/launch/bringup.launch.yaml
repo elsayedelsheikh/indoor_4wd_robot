@@ -1,0 +1,28 @@
+launch:
+### Lidar - Velodyne VLP16
+- include:
+    file: "$(find-pkg-share velodyne)/launch/velodyne-all-nodes-VLP16-launch.py"
+
+### Robot - Bot (URDF)
+- include:
+    file: "$(find-pkg-share bot_description)/launch/bot_description.launch.py"
+
+### Robot - Base Controller USB (Arduino)
+- include:
+    file: "$(find-pkg-share bot_bringup)/launch/bringup_comms.launch.yaml"
+
+### Localization - AMCL
+# - include:
+#     file: "$(find-pkg-share bot_navigation)/launch/localization.launch.py"
+
+# ### Navigation 
+# - include:
+#     file: "$(find-pkg-share bot_navigation)/launch/navigation.launch.py"
+    
+# ### RViz
+- node:
+    pkg: "rviz2"
+    exec: "rviz2"
+    name: "viz"
+    arguments: ["-d", "$(find-pkg-share bot_navigation)/rviz/nav2_default_view.rviz"]
+    output: "screen"

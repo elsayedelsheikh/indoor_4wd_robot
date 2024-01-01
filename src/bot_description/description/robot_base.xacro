@@ -1,0 +1,86 @@
+<?xml version="1.0"?>
+<robot xmlns:xacro="http://ros.org/wiki/xacro">
+  <!-- Args -->
+  <xacro:arg name="robot_namespace" default="/" />
+
+  <!-- Constants -->
+  <xacro:property name="M_PI" value="3.14159"/>
+
+  <!-- Included URDF/XACRO Files -->
+  <xacro:include filename="$(find bot_description)/description/wheel.xacro" />
+  <xacro:include filename="$(find bot_description)/description/material_macros.xacro" />
+
+  <xacro:macro name="bot_base" params="prefix">
+
+    <!-- Base Size -->
+    <xacro:property name="base_x_size" value="0.97536" />
+    <xacro:property name="base_y_size" value="0.5715" />
+    <xacro:property name="base_z_size" value="0.16129" />
+
+    <!-- Wheel Mounting Positions -->
+    <xacro:property name="wheelbase" value="0.6096" />             <!-- the distance between the front and rear axles -->
+    <xacro:property name="track" value="0.8382" />                 <!-- the distance between the left and right wheels -->
+    <xacro:property name="wheel_vertical_offset" value="0.0" />
+
+    <!-- Wheel Properties -->
+    <xacro:property name="wheel_length" value="0.2159" />
+    <xacro:property name="wheel_radius" value="0.2286" />
+
+    <!-- Base link is the center of the robot's bottom plate -->
+    <link name="${prefix}base_link">
+      <visual>
+        <origin xyz="0 0 0" rpy="0 0 0" />
+        <geometry>
+          <box size="${base_x_size} ${base_y_size} ${base_z_size}"/>
+        </geometry>
+        <material name="green"/>
+      </visual>
+      <collision>
+        <origin xyz="0 0 0" rpy="0 0 0" />
+        <geometry>
+          <box size="${base_x_size} ${base_y_size} ${base_z_size}"/>
+        </geometry>
+      </collision>
+    </link>
+
+    <!-- Base footprint is on the ground under the robot -->
+    <link name="${prefix}base_footprint"/>
+
+    <joint name="${prefix}base_footprint_joint" type="fixed">
+      <origin xyz="0 0 ${wheel_vertical_offset - wheel_radius}" rpy="0 0 0" />
+      <parent link="${prefix}base_link" />
+      <child link="${prefix}base_footprint" />
+    </joint>
+
+    <!-- Inertial link stores the robot's inertial information -->
+    <link name="${prefix}inertial_link">
+      <inertial>
+        <mass value="46.034" />
+        <origin xyz="-0.00065 -0.085 0.062" />
+        <inertia ixx="0.6022" ixy="-0.02364" ixz="-0.1197" iyy="1.7386" iyz="-0.001544" izz="2.0296" />
+      </inertial>
+    </link>
+
+    <joint name="${prefix}inertial_joint" type="fixed">
+      <origin xyz="0 0 0" rpy="0 0 0" />
+      <parent link="${prefix}base_link" />
+      <child link="${prefix}inertial_link" />
+    </joint>
+
+    <!-- Robot wheel macros -->
+    <xacro:bot_wheel wheel_prefix="${prefix}front_left">
+      <origin xyz="${wheelbase/2} ${track/2} ${wheel_vertical_offset}" rpy="0 0 0" />
+    </xacro:bot_wheel>
+    <xacro:bot_wheel wheel_prefix="${prefix}front_right">
+      <origin xyz="${wheelbase/2} ${-track/2} ${wheel_vertical_offset}" rpy="0 0 0" />
+    </xacro:bot_wheel>
+    <xacro:bot_wheel wheel_prefix="${prefix}rear_left">
+      <origin xyz="${-wheelbase/2} ${track/2} ${wheel_vertical_offset}" rpy="0 0 0" />
+    </xacro:bot_wheel>
+    <xacro:bot_wheel wheel_prefix="${prefix}rear_right">
+      <origin xyz="${-wheelbase/2} ${-track/2} ${wheel_vertical_offset}" rpy="0 0 0" />
+    </xacro:bot_wheel>
+
+  </xacro:macro>
+
+</robot>
